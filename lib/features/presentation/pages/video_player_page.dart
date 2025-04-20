@@ -12,33 +12,47 @@ class VideoPlayerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Initialize dependencies (in a real app, use dependency injection like get_it)
     final remoteDataSource = VideoRemoteDataSourceImp();
     final repository = VideoRepositoryImpl(remoteDataSource);
     final getVideoUseCase = GetVideoUseCase(repository);
 
     return BlocProvider(
-      create: (context) => VideoPlayerCubit(getVideoUseCase)
-        ..fetchVideo('https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'),
+      create:
+          (context) => VideoPlayerCubit(getVideoUseCase)..fetchVideo(
+            'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+          ),
       child: Scaffold(
-        backgroundColor: const Color(0xFFF1F5F4),
+        backgroundColor: Color(0xFFF1F5F4),
         appBar: AppBar(
           backgroundColor: const Color(0xFFF1F5F4),
           elevation: 0,
-          leading: const BackButton(color: Colors.black),
-          title:  Text(
-            'Назад',
-            style: TextStyle(fontSize: 20, color: Colors.black),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back_ios_new_outlined,
+              color: Colors.black,
+              size: 24,
+            ),
           ),
+          title: const Text(
+            'Назад',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+          ),
+
           centerTitle: false,
           actions: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Row(
                 children: const [
-                  Text('Хатамов Н', style: TextStyle(color: Colors.black)),
+                  Text(
+                    'Хатамов Н',
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400),
+                  ),
                   SizedBox(width: 4),
-                  Icon(Icons.person_outline, color: Colors.black),
+                  Icon(Icons.person_outline, color: Colors.black, size: 28),
                 ],
               ),
             ),
@@ -47,7 +61,7 @@ class VideoPlayerPage extends StatelessWidget {
         body: BlocBuilder<VideoPlayerCubit, VideoPlayerState>(
           builder: (context, state) {
             if (state is VideoPlayerLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return Center(child: CircularProgressIndicator());
             } else if (state is VideoPlayerLoaded) {
               return Center(child: VideoPlayerWidget());
             } else if (state is VideoPlayerError) {

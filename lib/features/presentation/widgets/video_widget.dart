@@ -14,7 +14,7 @@ class VideoPlayerWidget extends StatelessWidget {
       builder: (context, state) {
         if (state is VideoPlayerLoaded) {
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+            padding:  EdgeInsets.symmetric(horizontal: 15, vertical: 15),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -23,57 +23,65 @@ class VideoPlayerWidget extends StatelessWidget {
                   children: [
                     const Text(
                       'Видео уроки',
-                      style: TextStyle(fontSize: 20, color: Colors.black),
+                      style: TextStyle(fontSize: 26, color: Colors.black,fontWeight: FontWeight.w500),
                     ),
                     const Text(
                       '12-Январь',
-                      style: TextStyle(fontSize: 20, color: Colors.black),
+                      style: TextStyle(fontSize: 17, color: Colors.black),
                     ),
                   ],
                 ),
-                const SizedBox(height: 15),
+                const SizedBox(height: 20),
                 // Video va play/pause icon
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(20),
                   child: AspectRatio(
                     aspectRatio: state.controller.value.aspectRatio,
                     child: Stack(
-                      alignment: Alignment.center,
                       children: [
                         VideoPlayer(state.controller),
-                        if (state.controller.value.isBuffering)
-                          const Center(child: CircularProgressIndicator()),
-                        IconButton(
-                          icon: Icon(
-                            state.isPlaying ? Icons.pause : Icons.play_arrow,
-                            size: 60,
-                            color: Colors.white,
+                        Center(
+                          child: IconButton(
+                            icon: Icon(
+                              state.isPlaying ? Icons.pause : Icons.play_arrow,
+                              size: 60,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              context
+                                  .read<VideoPlayerCubit>()
+                                  .togglePlayPause();
+                            },
                           ),
-                          onPressed: () {
-                            context.read<VideoPlayerCubit>().togglePlayPause();
-                          },
                         ),
-                        VideoProgressIndicator(
-                          state.controller,
-                          allowScrubbing: true, // Allow the user to drag the thumb to seek
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          colors: const VideoProgressColors(
-                            playedColor: Color(0xFF1E4E4E), // Color of the played portion
-                            bufferedColor: Colors.grey, // Color of the buffered portion
-                            backgroundColor: Colors.black12, // Background color
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: VideoProgressIndicator(
+                            state.controller,
+                            allowScrubbing: true,
+                            padding:  EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 20,
+                            ),
+                            colors: const VideoProgressColors(
+                              playedColor: Color(0xFF1E4E4E),
+                              bufferedColor: Colors.white,
+                              backgroundColor: Colors.white,
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
                 ),
+                SizedBox(height: 14),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
                     'Случайные слова чтобы заполнить пространство, слова чтобы '
-                        'заполнить пространство, слова чтобы заполнить пространство, '
-                        'слова чтобы заполнить пространство',
-                    style: TextStyle(fontSize: 16),
+                    'заполнить пространство, слова чтобы заполнить пространство, '
+                    'слова чтобы заполнить пространство',
+                    style: TextStyle(fontSize: 20),textAlign: TextAlign.justify,
                   ),
                 ),
                 const Spacer(),
@@ -87,13 +95,12 @@ class VideoPlayerWidget extends StatelessWidget {
                     height: 50,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF1E4E4E),
+                        backgroundColor:  Color(0xFF1E4E4E),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
                       onPressed: () {
-                        // Add your logic for the "Закончил" button
                       },
                       child: const Text(
                         'Закончил',
